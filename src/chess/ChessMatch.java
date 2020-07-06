@@ -1,13 +1,17 @@
 package chess;
 
 import boardgame.Board;
+import boardgame.Position;
+import chess.pieces.King;
+import chess.pieces.Rook;
 
 public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 
 	private Board board; //IMPORT BOARD (TABULEIRO)
 	
-	public ChessMatch() {
-		board = new Board(8,8);	// DIMENSÃO DO TABULEIRO 
+	public ChessMatch() { // CONSTRUTOR DA PARTIDA
+		board = new Board(8,8);	// DIMENSÃO DO TABULEIRO
+		initialSetup();
 	}
 
 	public ChessPiece[][] getPieces(){ // RETORNA UMA MATRIZ DE PEÇAS DE XADREZ CORRESPONDENTE À "CHESS MATCH"
@@ -18,5 +22,11 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 			}
 		}
 		return mat;
+	}
+	
+	private void initialSetup() {
+		board.placePiece(new Rook(board, Color.WHITE),new Position(2,1));
+		board.placePiece(new King(board, Color.WHITE),new Position(0,4));
+		board.placePiece(new King(board, Color.BLACK),new Position(7,3));
 	}
 }

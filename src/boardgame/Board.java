@@ -35,4 +35,9 @@ public class Board {
 	public Piece piece(Position position) {
 		return pieces[position.getRow()][position.getColum()]; // RETORNAR A MATRIZ "PIECES" NAS POSIÇÕES
 	}
+	
+	public void placePiece(Piece piece, Position position) {  
+		pieces[position.getRow()][position.getColum()] = piece; // POSIÇOES NO TABULEIRO ONDE AS PEÇAS ESTÃO
+		piece.position = position; // INFORMANDO AS POSIÇÕES DAS PEÇAS 
+	}
 }
