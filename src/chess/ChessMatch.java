@@ -29,10 +29,11 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 		Position source = sourcePosition.toPosition(); // CONVERTENDO O SOURCE PARA POSIÇÃO DA MATRIZ 
 		Position target = targetPosition.toPosition();
 		validateSourcePosition(source); // VALIDANDO A POSIÇÃO DE ORIGEM
+		validaTargetPosition(source, target);
 		Piece capturedPiece = makeMove(source, target); // makeMove REALIZA O MOVIMENTO DA PEÇA PELA MATRIZ
 		return (ChessPiece) capturedPiece;
 	}
-	
+
 	private Piece makeMove(Position source, Position target) {
 		Piece p = board.removePiece(source); // RETIRANDO A PEÇA QUE ESTAVA NA POSIÇÃO DE ORIGEM 
 		Piece capturedPiece = board.removePiece(target); // "COMENDO" A PEÇA 
@@ -47,6 +48,13 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 		if(!board.piece(position).isThereAnyPossibleMove()) {
 			throw new ChessException("There is no possible moves for the chosen piece");
 		}
+	}
+	
+	private void validaTargetPosition(Position source, Position target) {
+		if(!board.piece(source).possibleMove(target)) { // SE O MOVIMENTO DE ORIGEM PARA O DESTINO NÃO É POSSÍVEL 
+			throw new ChessException("The chosen piece can't move to target position");
+		}
+		
 	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) { // RECEBE AS COORDENADAS EM LETRAS (a1)
