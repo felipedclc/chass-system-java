@@ -8,11 +8,23 @@ import chess.pieces.Rook;
 
 public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 
+	private int turn;
+	private Color currentPlayer;
 	private Board board; // IMPORT BOARD (TABULEIRO)
 
 	public ChessMatch() { // CONSTRUTOR DA PARTIDA
 		board = new Board(8, 8); // DIMENSÃO DO TABULEIRO
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
+	}
+	
+	public Color getCurrentPlayer() {
+		return currentPlayer;
+	}
+
+	public int getTurn() {
+		return turn;
 	}
 
 	public ChessPiece[][] getPieces() { // RETORNA UMA MATRIZ DE PEÇAS DE XADREZ CORRESPONDENTE À "CHESS MATCH"
@@ -37,6 +49,7 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 		validateSourcePosition(source); // VALIDANDO A POSIÇÃO DE ORIGEM
 		validaTargetPosition(source, target);
 		Piece capturedPiece = makeMove(source, target); // makeMove REALIZA O MOVIMENTO DA PEÇA PELA MATRIZ
+		nextTurn();
 		return (ChessPiece) capturedPiece;
 	}
 
@@ -51,6 +64,10 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 		if(!board.thereIsAPiece(position)) { // SE NÃO HOUVER UMA PEÇA NA POSIÇÃO DE ORIGEM
 			throw new ChessException("There is no piece on source position");
 		}
+		if(currentPlayer != ((ChessPiece) board.piece(position)).getColor()) { // TESTANDO A COR DA PEÇA E DO ADVERSARIO OU A SUA
+			throw new ChessException("The chosen piece is not yours");
+		}
+		
 		if(!board.piece(position).isThereAnyPossibleMove()) {
 			throw new ChessException("There is no possible moves for the chosen piece");
 		}
@@ -60,7 +77,11 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 		if(!board.piece(source).possibleMove(target)) { // SE O MOVIMENTO DE ORIGEM PARA O DESTINO NÃO É POSSÍVEL 
 			throw new ChessException("The chosen piece can't move to target position");
 		}
-		
+	}
+	
+	private void nextTurn(){
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE; // TROCA A COR DO JOGADOR A CADA JOGADA 
 	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) { // RECEBE AS COORDENADAS EM LETRAS (a1)
