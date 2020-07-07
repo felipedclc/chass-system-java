@@ -25,6 +25,12 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 		return mat;
 	}
 	
+	public boolean [][] possibleMoves(ChessPosition sourcepoPosition){
+		Position position = sourcepoPosition.toPosition(); // CONVERTENDO A POSI플O DE LETRAS(a1) PARA MATRIZ
+		validateSourcePosition(position); // VALIDANDO A POSICAO DE ORIGEM
+		return board.piece(position).possibleMoves(); // POSI합ES POSSIVEIS
+	}
+	
 	public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) { // POSI플O DE ORIGEM E DESTINO
 		Position source = sourcePosition.toPosition(); // CONVERTENDO O SOURCE PARA POSI플O DA MATRIZ 
 		Position target = targetPosition.toPosition();

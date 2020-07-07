@@ -50,7 +50,19 @@ public class UI {
 		for (int i = 0; i < pieces.length; i++) {
 			System.out.print((8 - i) + " ");
 			for (int j = 0; j < pieces.length; j++) {
-				printPiece(pieces[i][j]);
+				printPiece(pieces[i][j], false); // NAO PINTA O FUNDO (TRAJETO)
+			}
+			System.out.println();
+
+		}
+		System.out.println("  a b c d e f g h");
+	}
+	
+	public static void printBoard(ChessPiece[][] pieces, boolean [][] possibleMoves) {
+		for (int i = 0; i < pieces.length; i++) {
+			System.out.print((8 - i) + " ");
+			for (int j = 0; j < pieces.length; j++) {
+				printPiece(pieces[i][j], possibleMoves[i][j]); // PINTA O FUNDO (TRAJETO)
 			}
 			System.out.println();
 
@@ -58,14 +70,17 @@ public class UI {
 		System.out.println("  a b c d e f g h");
 	}
 
-	private static void printPiece(ChessPiece piece) {
+	private static void printPiece(ChessPiece piece, boolean background) {
+		if(background) {
+			System.out.print(ANSI_BLUE_BACKGROUND); // IMPRIMINDO A COR AZUL NO TRAJETO DA PEÇA 
+		}
 		if (piece == null) {
-			System.out.print("-");
+			System.out.print("-" + ANSI_RESET); // ANSI RESET LIMPA A COR
 		} else {
 			if (piece.getColor() == Color.WHITE) {
-				System.out.print(ANSI_WHITE + piece + ANSI_RESET);
+				System.out.print(ANSI_WHITE + piece + ANSI_RESET); // PEÇAS BRANCAS
 			} else {
-				System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
+				System.out.print(ANSI_YELLOW + piece + ANSI_RESET); // PEÇAS PRETAS(AMARELAS)
 			}
 		}
 		System.out.print(" ");
