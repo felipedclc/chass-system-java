@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
@@ -11,6 +14,9 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 	private int turn;
 	private Color currentPlayer;
 	private Board board; // IMPORT BOARD (TABULEIRO)
+	
+	private List<Piece> piecesOnTheBoard = new ArrayList<>();
+	private List<Piece> capturedPieces = new ArrayList<>();
 
 	public ChessMatch() { // CONSTRUTOR DA PARTIDA
 		board = new Board(8, 8); // DIMENSÃO DO TABULEIRO
@@ -55,8 +61,14 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 
 	private Piece makeMove(Position source, Position target) {
 		Piece p = board.removePiece(source); // RETIRANDO A PEÇA QUE ESTAVA NA POSIÇÃO DE ORIGEM 
-		Piece capturedPiece = board.removePiece(target); // "COMENDO" A PEÇA 
-		board.placePiece(p, target);
+		Piece capturedPiece = board.removePiece(target); // PEÇA CAPTURADA NA VARIAVEL (CAPTURED PIECE) 	 
+		board.placePiece(p, target); // SUBSTITUIÇÃO DAS PEÇAS
+		
+		if(capturedPiece != null) {
+			piecesOnTheBoard.remove(capturedPiece);
+			capturedPieces.add(capturedPiece);
+		}
+		
 		return capturedPiece;
 	}
 
@@ -85,7 +97,8 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) { // RECEBE AS COORDENADAS EM LETRAS (a1)
-		board.placePiece(piece, new ChessPosition(column, row).toPosition());
+		board.placePiece(piece, new ChessPosition(column, row).toPosition()); // COLOCANDO AS PEÇAS NO TABULEIRO
+		piecesOnTheBoard.add(piece); // ADICIONANDO AS PEÇAS NA LISTA 
 	}
 
 	private void initialSetup() {
