@@ -25,8 +25,8 @@ public class ChessPosition {
 		return new Position(8 - row, column - 'a');
 	}
 	
-	protected static ChessPosition fromPosition(Position position) { // COVERTENDO OS NUMEROS PARA LETRAS(a1)
-		return new ChessPosition((char)('a' - position.getColumn()), 8 - position.getRow());
+	protected static ChessPosition fromPosition(Position position) { // COVERTENDO A POSIÇÃO DE MATRIZ(0,0) PARA LETRAS(a1)
+		return new ChessPosition((char)('a' + position.getColumn()), 8 - position.getRow());
 	}
 	
 	@Override
