@@ -16,6 +16,7 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 	private Color currentPlayer;
 	private Board board; // IMPORT BOARD (TABULEIRO)
 	private boolean check; // boolean JA COMEÇA VALENDO FALSE
+	private boolean checkMate;
 
 	private List<Piece> piecesOnTheBoard = new ArrayList<>();
 	private List<Piece> capturedPieces = new ArrayList<>();
@@ -37,6 +38,10 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 	
 	public boolean getCheck() {
 		return check;
+	}
+	
+	public boolean isCheckMate() {
+		return checkMate;
 	}
 
 	public ChessPiece[][] getPieces() { // RETORNA UMA MATRIZ DE PEÇAS DE XADREZ CORRESPONDENTE À "CHESS MATCH"
@@ -69,7 +74,12 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 		
 		check = (testCheck(opponent(currentPlayer))) ? true : false; // TESTANDO SE O OPONENTE ESTA EM CHEQUE
 		
-		nextTurn();
+		if(testCheckMate(opponent(currentPlayer))) { // TESTANDO SE HOUVE CHECK MATE
+			checkMate = true; //END GAME
+		}
+		else { // JOGO CONTINUA
+		nextTurn(); 
+		}
 		return (ChessPiece) capturedPiece;
 	}
 
@@ -124,7 +134,7 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 	}
 
 	private Color opponent(Color color) {
-		return (color == color.WHITE) ? Color.BLACK : Color.WHITE; // SE A COR FOR BRANCA VAI RETORNAR O
+		return (color == Color.WHITE) ? Color.BLACK : Color.WHITE; // SE A COR FOR BRANCA VAI RETORNAR O
 																	// PRETO(OPONENTE), CASO CONTRARIO RETORNA UM BRANCO
 	}
 
@@ -150,6 +160,31 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 			}
 		}
 		return false; // SE PASSAR DO IF ELE RETORNA FALSE
+	}
+	
+	private boolean testCheckMate(Color color) {
+		if(!testCheck(color)) {
+			return false;
+		}
+	List<Piece> list = piecesOnTheBoard.stream().filter(x -> ((ChessPiece) x).getColor() == color).collect(Collectors.toList());
+	for(Piece p : list) {
+		boolean[][] mat = p.possibleMoves(); // CRIANDO UMA MATRIZ DE MOVIMENTOS POSSIVEIS
+		for(int i=0; i<board.getRows(); i++) {
+			for(int j=0; j<board.getColumns(); j++) {
+				if(mat[i][j]) { // SE O MOVIMENTO FOR POSSIVEL 
+					Position source = ((ChessPiece)p).getChessPosition().toPosition(); // CONVERTENDO A PEÇA P(REI) PARA MATRIZ
+					Position target = new Position(i, j); // POSIÇÃO DE DESTINO NA MATRIZ
+					Piece capturedPiece = makeMove(source, target); // FAZENDO O MOVIMENTO DENTRO DA MATRIZ
+					boolean testCheck = testCheck(color); // TESTANDO SE O REI AINDA ESTA EM CHECK
+					undoMove(source, target, capturedPiece); // DESFAZENDO O MOVIMENTO DE TESTE
+					if(!testCheck) { // SE NÃO ESTA MAIS EM CHEQUE
+						return false;
+					}
+				}
+			}
+		}
+	}
+	return true;
 	}
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) { // RECEBE AS COORDENADAS EM LETRAS (a1)
