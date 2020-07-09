@@ -38,12 +38,12 @@ public class Pawn extends ChessPiece {
 			}
 		}
 		else { // SE A PEÇA FOR PRETA (PEÇA ANDA PARA BAIXO)
-			p.setValues(position.getRow() + 1, position.getColumn()); // 1 POSIÇÂO ACIMA
+			p.setValues(position.getRow() + 1, position.getColumn()); // 1 POSIÇÂO ABAIXO
 			if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p)) { // Posição existir e não tiver peça bloqueando a passagem
 				mat[p.getRow()][p.getColumn()] = true; // PODE MOVER
 			}
-			p.setValues(position.getRow() + 2, position.getColumn()); // 2 POSICOES ACIMA
-			Position p2 = new Position(position.getRow() - 1, position.getColumn());
+			p.setValues(position.getRow() + 2, position.getColumn()); // 2 POSICOES ABAIXO
+			Position p2 = new Position(position.getRow() + 1, position.getColumn());
 			if (getBoard().positionExists(p) && !getBoard().thereIsAPiece(p) && getBoard().positionExists(p2)
 					&& !getBoard().thereIsAPiece(p2) && getMoveCount() == 0) {
 				mat[p.getRow()][p.getColumn()] = true; // PODE MOVER
