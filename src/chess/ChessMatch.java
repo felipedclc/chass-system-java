@@ -8,6 +8,7 @@ import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
 import chess.pieces.King;
+import chess.pieces.Pawn;
 import chess.pieces.Rook;
 
 public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
@@ -84,9 +85,10 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 	}
 
 	private Piece makeMove(Position source, Position target) {
-		Piece p = board.removePiece(source); // RETIRANDO A PEÇA QUE ESTAVA NA POSIÇÃO DE ORIGEM
+		ChessPiece p = (ChessPiece) board.removePiece(source); // RETIRANDO A PEÇA QUE ESTAVA NA POSIÇÃO DE ORIGEM
+		p.increaseMoveCount();
 		Piece capturedPiece = board.removePiece(target); // PEÇA CAPTURADA NA VARIAVEL (CAPTURED PIECE)
-		board.placePiece(p, target); // SUBSTITUIÇÃO DAS PEÇAS
+		board.placePiece(p, target); // SUBSTITUIÇÃO DAS PEÇAS (P - ORIGEM)
 
 		if (capturedPiece != null) {
 			piecesOnTheBoard.remove(capturedPiece);
@@ -97,7 +99,8 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 	}
 
 	private void undoMove(Position source, Position target, Piece capturedPiece) {
-		Piece p = board.removePiece(target); // REMOVENDO A PEÇA DO DESTINO FINAL
+		ChessPiece p = (ChessPiece) board.removePiece(target); // REMOVENDO A PEÇA DO DESTINO FINAL
+		p.decreaseMoveCount();
 		board.placePiece(p, source); // RETORNA A PEÇA PARA A POSIÇAO DE ORIGEM
 
 		if (capturedPiece != null) {
@@ -193,18 +196,30 @@ public class ChessMatch { // CLASSE ONDE CONTEM AS REGRAS DO JOGO
 	}
 
 	private void initialSetup() {
-		placeNewPiece('c', 1, new Rook(board, Color.WHITE));
-		placeNewPiece('c', 2, new Rook(board, Color.WHITE));
-		placeNewPiece('d', 2, new Rook(board, Color.WHITE));
-		placeNewPiece('e', 2, new Rook(board, Color.WHITE));
-		placeNewPiece('e', 1, new Rook(board, Color.WHITE));
-		placeNewPiece('d', 1, new King(board, Color.WHITE));
+        placeNewPiece('d', 1, new Rook(board, Color.WHITE));
+        placeNewPiece('a', 1, new Rook(board, Color.WHITE));
+        placeNewPiece('e', 1, new King(board, Color.WHITE));
+        placeNewPiece('h', 1, new Rook(board, Color.WHITE));
+        placeNewPiece('a', 2, new Pawn(board, Color.WHITE));
+        placeNewPiece('b', 2, new Pawn(board, Color.WHITE));
+        placeNewPiece('c', 2, new Pawn(board, Color.WHITE));
+        placeNewPiece('d', 2, new Pawn(board, Color.WHITE));
+        placeNewPiece('e', 2, new Pawn(board, Color.WHITE));
+        placeNewPiece('f', 2, new Pawn(board, Color.WHITE));
+        placeNewPiece('g', 2, new Pawn(board, Color.WHITE));
+        placeNewPiece('h', 2, new Pawn(board, Color.WHITE));
 
-		placeNewPiece('c', 7, new Rook(board, Color.BLACK));
-		placeNewPiece('c', 8, new Rook(board, Color.BLACK));
-		placeNewPiece('d', 7, new Rook(board, Color.BLACK));
-		placeNewPiece('e', 7, new Rook(board, Color.BLACK));
-		placeNewPiece('e', 8, new Rook(board, Color.BLACK));
-		placeNewPiece('d', 8, new King(board, Color.BLACK));
+        placeNewPiece('b', 8, new Rook(board, Color.BLACK));
+        placeNewPiece('a', 8, new Rook(board, Color.BLACK));
+        placeNewPiece('e', 8, new King(board, Color.BLACK));
+        placeNewPiece('h', 8, new Rook(board, Color.BLACK));
+        placeNewPiece('a', 7, new Pawn(board, Color.BLACK));
+        placeNewPiece('b', 7, new Pawn(board, Color.BLACK));
+        placeNewPiece('c', 7, new Pawn(board, Color.BLACK));
+        placeNewPiece('d', 7, new Pawn(board, Color.BLACK));
+        placeNewPiece('e', 7, new Pawn(board, Color.BLACK));
+        placeNewPiece('f', 7, new Pawn(board, Color.BLACK));
+        placeNewPiece('g', 7, new Pawn(board, Color.BLACK));
+        placeNewPiece('h', 7, new Pawn(board, Color.BLACK));
 	}
 }
